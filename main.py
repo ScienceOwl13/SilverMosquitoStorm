@@ -1,20 +1,29 @@
+# Import Libraries for discord
 import discord
+import os # For token to work
 from discord.ext import commands
-import os
 
-client = commands.Bot(command_prefix = "-")
-client.remove_command("help")
+# Import Libraries for console date/time messages
+from datetime import datetime
+from pytz import timezone 
 
-# Random Variables
-rickRollURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+client = commands.Bot(command_prefix = "-") # Set the prefix for the bot
+client.remove_command("help") # Remove default help command so custom can be used
 
+# Gets current time for the console command log
+def currentTime():
+	Eastern = timezone("US/Eastern")
+	EST_Time = datetime.now(Eastern)
+
+	return EST_Time.strftime("%H:%M:%S EST")
+
+	
 # When bot starts
 @client.event
 async def on_ready():
 	print("Bot is ready.")
 	print("Logged in as @{0.user}".format(client))
 	print("----------\n")
-
 	
 # Atominous bot things
 @client.event
@@ -28,33 +37,21 @@ async def on_member_remove(member):
 # commands
 @client.command()
 async def ping(ctx):
-	print("Ping command was called")
+	print(f"Ping command was called at {currentTime()}")
 	await ctx.send(f"Pong! Latency of `{round(client.latency * 1000)}ms`.")	
 
 @client.command()
 async def help(ctx):
-	print("Help command was called")
-
+	print(f"Help command was called at {currentTime()}")
+	
 	embed = discord.Embed(
-		description="""
-		*This bot is currently under developement, so the commands are limited*
-		\n
-		**Current Commands:**
-		- Help
-		  - Displays this pannel
-		- Ping
-		  - Displays bot latency.
-		"""
+		description = "*Please notethat this bot is currently under developement, so there may be bugs. If bugs happen, please let <@!624686837448835115> know.*",
+		colour = 0xfce205
 	)
-	await ctx.send(embed=embed)
-
-@client.command()
-async def embed(ctx):
-	embed = discord.Embed(
-		description = "*Please notethat this bot is currently under developement, so there may be bugs and fun stuff*",
-		colour = discord.Colour.blue()
-	)
-	embed.add_field(name = "two", value = "Displays this command.", inline = True)
+	embed.add_field(name = "-help", value = "Displays this command.", inline = True)
+	embed.add_field(name = "-ping", value = "Displays the latency of the bot.", inline = True)
+	embed.add_field(name = "testing", value = "You have no value", inline = True)
+	embed.add_field(name = "testing2", value = "You have no value", inline = True)
 
 	await ctx.send(embed=embed)
 
